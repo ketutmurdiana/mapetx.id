@@ -65,12 +65,17 @@
         0 8px 30px rgba(255,122,1,0.08);
     }
 
-    .logo:hover{
-  transform: translateY(-14px) scale(1.05);
-  box-shadow:
-    0 30px 80px rgba(0,0,0,0.18),
-    0 15px 40px rgba(255,122,1,0.25);
-}
+    .logo{
+      width:78px;
+      height:78px;
+      object-fit:contain;
+      border-radius:22px;
+      padding:10px;
+      background:white;
+      box-shadow:0 10px 30px rgba(0,0,0,0.08);
+      margin-bottom:24px;
+    }
+
     .success{
       width:92px;
       height:92px;
@@ -182,7 +187,7 @@
 
     setTimeout(() => {
       window.location.href = "/"
-    }, 3000)
+    }, 10000)
 
   </script>
 
