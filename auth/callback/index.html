@@ -177,11 +177,80 @@
 
   </div>
 
-  <script>
+  <!-- <script>
     setTimeout(() => {
       window.location.href = "/"
     }, 3000)
-  </script>
+  </script> -->
+  <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+
+<script>
+
+  const SUPABASE_URL =
+    "https://YOUR_PROJECT.supabase.co"
+
+  const SUPABASE_ANON_KEY =
+    "YOUR_ANON_KEY"
+
+  const supabase = window.supabase.createClient(
+    SUPABASE_URL,
+    SUPABASE_ANON_KEY
+  )
+
+  async function handleAuth() {
+
+    try {
+
+      // Ambil token dari URL hash
+      const hash = window.location.hash
+
+      const params = new URLSearchParams(
+        hash.substring(1)
+      )
+
+      const access_token =
+        params.get("access_token")
+
+      const refresh_token =
+        params.get("refresh_token")
+
+      // Kalau token ada -> buat session
+      if (access_token && refresh_token) {
+
+        const { error } =
+          await supabase.auth.setSession({
+            access_token,
+            refresh_token
+          })
+
+        if (error) {
+          console.error(error)
+          return
+        }
+
+        // Redirect ke aplikasi Android
+        setTimeout(() => {
+          window.location.href =
+            "mapetx://auth/callback"
+        }, 2000)
+
+      } else {
+
+        console.log("No token found")
+
+        setTimeout(() => {
+          window.location.href = "/"
+        }, 2000)
+      }
+
+    } catch (e) {
+      console.error(e)
+    }
+  }
+
+  handleAuth()
+
+</script>
 
 </body>
 </html>
