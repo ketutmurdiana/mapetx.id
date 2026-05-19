@@ -1,252 +1,43 @@
 <!DOCTYPE html>
-<html lang="en">
+<html>
 <head>
-  <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
-  <title>MAPETX Verification</title>
-
-  <style>
-    *{
-      margin:0;
-      padding:0;
-      box-sizing:border-box;
-      font-family:Arial, sans-serif;
-    }
-
-    body{
-      height:100vh;
-      display:flex;
-      align-items:center;
-      justify-content:center;
-      background:#ffffff;
-      overflow:hidden;
-      position:relative;
-      text-align:center;
-    }
-
-    /* glow background */
-    .glow{
-      position:absolute;
-      border-radius:50%;
-      filter:blur(100px);
-      opacity:0.5;
-      z-index:0;
-    }
-
-    .glow1{
-      width:380px;
-      height:380px;
-      background:#ff7a01;
-      top:-120px;
-      right:-120px;
-    }
-
-    .glow2{
-      width:320px;
-      height:320px;
-      background:#ffd5b0;
-      bottom:-120px;
-      left:-120px;
-    }
-
-    /* MAIN CONTENT */
-    .wrap{
-      position:relative;
-      z-index:2;
-      display:flex;
-      flex-direction:column;
-      align-items:center;
-      justify-content:center;
-      gap:18px;
-      padding:20px;
-    }
-
-    /* HERO LOGO */
-    .logo{
-      width:220px;
-      height:220px;
-      object-fit:contain;
-
-      background: transparent;
-      filter: drop-shadow(0 10px 20px rgba(0,0,0,0.15));
-
-      transform: translateY(-10px);
-      animation: float 3s ease-in-out infinite;
-    }
-
-    @keyframes float{
-      0%,100%{ transform: translateY(-10px); }
-      50%{ transform: translateY(-18px); }
-    }
-
-    /* ICON CHECK */
-    .success{
-      width:96px;
-      height:96px;
-      border-radius:50%;
-      background:linear-gradient(135deg,#ff7a01,#ff9f45);
-      display:flex;
-      align-items:center;
-      justify-content:center;
-      box-shadow:0 20px 60px rgba(255,122,1,0.3);
-    }
-
-    .success svg{
-      width:44px;
-      height:44px;
-      stroke:white;
-      stroke-width:3;
-      fill:none;
-    }
-
-    h1{
-      font-size:34px;
-      font-weight:800;
-      color:#111827;
-      margin-top:10px;
-    }
-
-    p{
-      max-width:360px;
-      font-size:16px;
-      color:#64748b;
-      line-height:1.7;
-    }
-
-    /* LOADER */
-    .loader{
-      width:40px;
-      height:40px;
-      border-radius:50%;
-      border:4px solid #ffe1c7;
-      border-top:4px solid #ff7a01;
-      animation:spin 1s linear infinite;
-      margin-top:10px;
-    }
-
-    @keyframes spin{
-      to{ transform:rotate(360deg); }
-    }
-
-    .text{
-      font-size:13px;
-      color:#94a3b8;
-      margin-top:6px;
-    }
-
-    @media(max-width:600px){
-      .logo{
-        width:150px;
-        height:150px;
-      }
-
-      h1{
-        font-size:28px;
-      }
-    }
-  </style>
+    <title>Memverifikasi Akun MapetX...</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <style>
+        body { font-family: sans-serif; text-align: center; padding-top: 50px; color: #374151; }
+        .loader { border: 4px solid #f3f3f3; border-top: 4px solid #FF7A01; border-radius: 50%; width: 40px; height: 40px; animation: spin 1s linear infinite; margin: 20px auto; }
+        @keyframes spin { 0% { transform: rotate(0deg); } 100% { transform: rotate(360deg); } }
+    </style>
 </head>
-
 <body>
-
-  <div class="glow glow1"></div>
-  <div class="glow glow2"></div>
-
-  <div class="wrap">
-
-    <!-- HERO LOGO (DOMINAN) -->
-    <img src="/log_mapetx_atas.png" class="logo">
-
-    <!-- SUCCESS ICON -->
-    <div class="success">
-      <svg viewBox="0 0 24 24">
-        <path d="M20 6L9 17L4 12"/>
-      </svg>
-    </div>
-
-    <h1>Email Verified</h1>
-
-    <p>
-      Your MAPETX account has been successfully verified.
-      Please wait while we prepare your secure session.
-    </p>
-
     <div class="loader"></div>
+    <p>Verifikasi berhasil! Mengalihkan ke aplikasi MapetX...</p>
 
-    <div class="text">Redirecting to MAPETX...</div>
+    <script>
+        function redirectToApp() {
+            // 1. Ambil semua token (#access_token=...) dari URL
+            const hash = window.location.hash;
+            
+            if (hash) {
+                // 2. Kirim token tersebut ke Deep Link Android
+                // Hasilnya: mapetx://auth/callback#access_token=...
+                const androidAppUrl = "mapetx://auth/callback" + hash;
+                
+                // Pindahkan user ke aplikasi
+                window.location.href = androidAppUrl;
 
-  </div>
-
-
-  <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
-
-<script>
-
-  const SUPABASE_URL =
-    "https://YOUR_PROJECT.supabase.co"
-
-  const SUPABASE_ANON_KEY =
-    "YOUR_ANON_KEY"
-
-  const supabase = window.supabase.createClient(
-    SUPABASE_URL,
-    SUPABASE_ANON_KEY
-  )
-
-  async function handleAuth() {
-
-    try {
-
-      // Ambil token dari URL hash
-      const hash = window.location.hash
-
-      const params = new URLSearchParams(
-        hash.substring(1)
-      )
-
-      const access_token =
-        params.get("access_token")
-
-      const refresh_token =
-        params.get("refresh_token")
-
-      // Kalau token ada -> buat session
-      if (access_token && refresh_token) {
-
-        const { error } =
-          await supabase.auth.setSession({
-            access_token,
-            refresh_token
-          })
-
-        if (error) {
-          console.error(error)
-          return
+                // Backup: Jika aplikasi tidak terbuka dalam 2 detik, arahkan ke landing page
+                setTimeout(() => {
+                    window.location.href = "https://mapetx.vercel.app";
+                }, 2000);
+            } else {
+                // Jika tidak ada token, kembalikan ke home
+                window.location.href = "/";
+            }
         }
 
-        // Redirect ke aplikasi Android
-        setTimeout(() => {
-          window.location.href =
-            "mapetx://auth/callback"
-        }, 3000)
-
-      } else {
-
-        console.log("No token found")
-
-        setTimeout(() => {
-          window.location.href = "/"
-        }, 3000)
-      }
-
-    } catch (e) {
-      console.error(e)
-    }
-  }
-
-  handleAuth()
-
-</script>
-
+        // Jalankan otomatis
+        window.onload = redirectToApp;
+    </script>
 </body>
 </html>
