@@ -1,30 +1,28 @@
 <!DOCTYPE html>
 <html>
 <head>
-    <title>Memverifikasi MapetX...</title>    <script>
-        window.onload = function() {
-            // 1. Ambil Query (?code=...) dan Hash (#access_token=...)
-            const search = window.location.search;
-            const hash = window.location.hash;
-            
-            // 2. Gabungkan semuanya untuk dikirim ke aplikasi
-            // Contoh: mapetx://auth/callback?code=...#access_token=...
-            const deepLink = "mapetx://auth/callback" + search + hash;
-
-            // 3. Coba buka aplikasi
-            window.location.href = deepLink;
-
-            // 4. Backup: Jika aplikasi tidak terbuka dalam 2.5 detik, arahkan ke web utama
-            setTimeout(function() {
-                // Jika masih di halaman ini, berarti aplikasi gagal terbuka
-                if (!document.hidden) {
-                    window.location.href = "https://mapetx.vercel.app/verify-success"; 
-                }
-            }, 2500);
-        }
-    </script>
+    <title>Memverifikasi Akun MapetX...</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <style>
+        body { background: #FFFFFF; display: flex; flex-direction: column; align-items: center; justify-content: center; height: 100vh; margin: 0; font-family: sans-serif; }
+        .spinner { border: 3px solid #f3f3f3; border-top: 3px solid #FF7A01; border-radius: 50%; width: 30px; height: 30px; animation: spin 1s linear infinite; }
+        @keyframes spin { 0% { transform: rotate(0deg); } 100% { transform: rotate(360deg); } }
+        p { color: #666; margin-top: 20px; font-size: 14px; }
+    </style>
 </head>
 <body>
-    <p>Sedang membuka aplikasi MapetX... Jika tidak terbuka, <a href="mapetx://auth/callback">Klik di sini</a></p>
+    <div class="spinner"></div>
+    <p>Menghubungkan ke aplikasi MapetX...</p>
+    <script>
+        window.onload = function() {
+            const deepLink = "mapetx://auth/callback" + window.location.search + window.location.hash;
+            window.location.replace(deepLink); // Gunakan replace agar tidak bisa "Back" ke sini
+            
+            // Jika dalam 4 detik masih di sini, baru tampilkan pesan sukses di web
+            setTimeout(() => {
+                document.body.innerHTML = "<h3>Verifikasi Selesai</h3><p>Anda bisa menutup halaman ini dan kembali ke aplikasi.</p>";
+            }, 4000);
+        }
+    </script>
 </body>
 </html>
